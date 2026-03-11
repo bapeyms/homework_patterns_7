@@ -4,7 +4,7 @@
 #include <algorithm>
 using namespace std;
 
-class Component abstract
+class Component
 {
 protected:
 	string name;
@@ -14,9 +14,9 @@ public:
 		this->name = name;
 	}
 
-	virtual  void Add(Component* c) abstract;
-	virtual  void Remove(Component* c) abstract;
-	virtual  void Display(int depth) abstract;
+	virtual void Add(Component* c) = 0;
+	virtual void Remove(Component* c) = 0;
+	virtual void Display(int depth) = 0;
 };
 
 class Composite : public Component
@@ -37,6 +37,10 @@ public:
 	}
 	void Display(int depth) override
 	{
+		for (int i = 0; i < depth; i++)
+		{
+			cout << " ";
+		}
 		cout << name << endl;
 
 		for (Component* component : components)
@@ -61,49 +65,83 @@ public:
 	}
 	void Display(int depth) override
 	{
+		for (int i = 0; i < depth; i++)
+		{
+			cout << " ";
+		}
 		cout << name << endl;
 	}
 };
 
 int main()
 {
-
+	// reception area
 	Component* receptionArea = new Composite("1. Reception area");
 
 	receptionArea->Add(new Leaf("a. It should be designed in warm tones"));
-	receptionArea->Add(new Leaf("b. Coffee table"));
 
-	Component* comp = new Composite("Folder X");
+	Component* coffeeTable = new Composite("b. Coffee table");
+	coffeeTable->Add(new Leaf("i. 10-20 magazines such as 'Computer World'"));
+	receptionArea->Add(coffeeTable);
 
-	comp->Add(new Leaf("File XA"));
-	comp->Add(new Leaf("File XB"));
-	receptionArea->Add(comp);
+	receptionArea->Add(new Leaf("c. Soft sofa"));
+	Component* secretaryTable = new Composite("d. Secretary's desk");
+	secretaryTable->Add(new Leaf("i. Computer"));
+	secretaryTable->Add(new Leaf("ii. Office supplies"));
+	receptionArea->Add(secretaryTable);
+	receptionArea->Add(new Leaf("e. Water cooler with hot and cold water"));
 
-	Component* comp2 = new Composite("");
-
-	comp2->Add(new Leaf("File YA"));
-	comp2->Add(new Leaf("File YB"));
-
-	Component* comp3 = new Composite("Folder Z");
-	comp3->Add(new Leaf("File YZA"));
-	comp3->Add(new Leaf("File YZB"));
-	comp2->Add(comp3);
-
-	receptionArea->Add(comp2);
-
-	receptionArea->Add(new Leaf("File C"));
-
-	Component* leaf = new Leaf("File D");
-	receptionArea->Add(leaf);
 	receptionArea->Display(1);
-	cout << "\n\n";
+	cout << endl;
 
-	receptionArea->Remove(leaf);
-	receptionArea->Display(1);
+	// classroom 1
+	Component* classroom1 = new Composite("2. Classroom 1");
+	classroom1->Add(new Leaf("a. 10 desks"));
+	classroom1->Add(new Leaf("b. Board"));
+	Component* teacherDesk = new Composite("c. Teacher's desk");
+	teacherDesk->Add(new Leaf("i. Computer"));
+	classroom1->Add(teacherDesk);
+	classroom1->Add(new Leaf("d. Poster of famous mathematicians"));
 
-	cout << "\n\n";
-	comp2->Remove(comp3);
-	receptionArea->Display(1);
+	classroom1->Display(1);
+	cout << endl;
+
+	// classroom 2
+	Component* classroom2 = new Composite("3. Classroom 2");
+	Component* blackDesks = new Composite("a. 20 desks");
+	blackDesks->Add(new Leaf("i. Black desks"));
+	blackDesks->Add(new Leaf("ii. The desks are arranged in an ovel or a circle"));
+	classroom2->Add(blackDesks);
+	classroom2->Add(new Leaf("b. Board"));
+	classroom2->Add(new Leaf("c. Soft sofa"));
+
+	classroom2->Display(1);
+	cout << endl;
+
+	// computer classroom
+	Component* computerClassroom = new Composite("4. Computer classroom");
+	Component* computerDesks = new Composite("a. 10 computer desks");
+	computerDesks->Add(new Leaf("i. A computer on each desk"));
+	computerDesks->Add(new Leaf("ii. A power outlet near each desk"));
+	computerClassroom->Add(computerDesks);
+	Component* board = new Composite("b. Board");
+	board->Add(new Leaf("i. A set of colored markers"));
+	computerClassroom->Add(board);
+
+	computerClassroom->Display(1);
+	cout << endl;
+
+	// dining area
+	Component* diningRoom = new Composite("5. Dining room");
+	diningRoom->Add(new Leaf("1. Coffee machine"));
+	Component* table = new Composite("2. Table");
+	table->Add(new Leaf("i. 4 chairs"));
+	diningRoom->Add(table);
+	diningRoom->Add(new Leaf("3. Refrigerator"));
+	diningRoom->Add(new Leaf("4. Sink"));
+
+	diningRoom->Display(1);
+	cout << endl;
 
 	system("pause");
 }
